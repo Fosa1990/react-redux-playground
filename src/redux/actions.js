@@ -21,7 +21,7 @@ export const deleteTask = taskId => {
 
 export const toggleCompleted = taskId => {
   return {
-    type: actionTypes.tasks.toogle,
+    type: actionTypes.tasks.toggle,
     payload: taskId,
   };
 };

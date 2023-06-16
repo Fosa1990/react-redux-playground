@@ -8,7 +8,7 @@ export const actionTypes = Object.freeze({
   tasks: {
     add: "tasks/addTask",
     delete: "tasks/deleteTask",
-    toogle: "tasks/toggleCompleted ",
+    toggle: "tasks/toggleCompleted ",
   },
   filters: {
     setStatus: "filters/setStatusFilter",
