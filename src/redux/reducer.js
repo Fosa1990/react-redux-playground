@@ -1,5 +1,11 @@
-import { combineReducers } from "redux";
-import { statusFilters, actionTypes } from "./constants";
+import { createReducer } from "@reduxjs/toolkit";
+import {
+  addTask,
+  deleteTask,
+  toggleCompleted,
+  setStatusFilter,
+} from "./actions";
+import { statusFilters } from "./constants";
 
 const tasksInitialState = [
   { id: 0, text: "Learn HTML and CSS", completed: true },
@@ -9,42 +15,30 @@ const tasksInitialState = [
   { id: 4, text: "Build amazing apps", completed: false },
 ];
 
-const tasksReducer = (state = tasksInitialState, action) => {
-  switch (action.type) {
-    case actionTypes.tasks.add: {
-      return [...state, action.payload];
-    }
-
-    case actionTypes.tasks.delete: {
-      return state.filter(task => task.id !== action.payload);
-    }
-
-    case actionTypes.tasks.toggle:
-      return state.map(task => {
-        if (task.id !== action.payload) return task;
-        return { ...task, completed: !task.completed };
-      });
-
-    default:
-      return state;
-  }
-};
+export const tasksReducer = createReducer(tasksInitialState, {
+  [addTask]: (state, action) => {
+    return [...state, action.payload];
+  },
+  [deleteTask]: (state, action) => {
+    return state.filter(task => task.id !== action.payload);
+  },
+  [toggleCompleted]: (state, action) => {
+    return state.map(task => {
+      if (task.id !== action.payload) return task;
+      return { ...task, completed: !task.completed };
+    });
+  },
+});
 
 const filtersInitialState = {
   status: statusFilters.all,
 };
 
-const filtersReducer = (state = filtersInitialState, action) => {
-  switch (action.type) {
-    case actionTypes.filters.setStatus:
-      return { ...state, status: action.payload };
-
-    default:
-      return state;
-  }
-};
-
-export const rootReducer = combineReducers({
-  tasks: tasksReducer,
-  filters: filtersReducer,
+export const filtersReducer = createReducer(filtersInitialState, {
+  [setStatusFilter]: (state, action) => {
+    return {
+      ...state,
+      status: action.payload,
+    };
+  },
 });
