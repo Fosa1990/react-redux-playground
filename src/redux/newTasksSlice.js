@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { fetchTasks } from "./newOperations";
+
 const newTasksInitialState = {
   items: [],
   isLoading: false,
@@ -8,22 +10,20 @@ const newTasksInitialState = {
 const newTasksSlice = createSlice({
   name: "tasks",
   initialState: newTasksInitialState,
-  reducers: {
-    fetchingInProgress(state) {
+  extraReducers: {
+    [fetchTasks.pending](state, _) {
       state.isLoading = true;
     },
-    fetchingSuccess(state, action) {
+    [fetchTasks.fulfilled](state, action) {
       state.isLoading = false;
       state.error = null;
       state.items = action.payload;
     },
-    fetchingError(state, action) {
+    [fetchTasks.rejected](state, action) {
       state.isLoading = false;
       state.error = action.payload;
     },
   },
 });
 
-export const { fetchingInProgress, fetchingSuccess, fetchingError } =
-  newTasksSlice.actions;
 export const newTasksReducer = newTasksSlice.reducer;
