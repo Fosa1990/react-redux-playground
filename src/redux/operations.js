@@ -6,50 +6,50 @@ axios.defaults.baseURL = "https://649177112f2c7ee6c2c8437e.mockapi.io";
 
 export const fetchTasks = createAsyncThunk(
   "tasks/fetchAll",
-  async (_, thunkAPI) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("/tasks");
-      return response.data;
+      const { data } = await axios.get("/tasks");
+      return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const addTask = createAsyncThunk(
   "tasks/addTask",
-  async (text, thunkAPI) => {
+  async (text, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/tasks", { text });
-      return response.data;
+      const { data } = await axios.post("/tasks", { text });
+      return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
-  async (taskId, thunkAPI) => {
+  async (taskId, { rejectWithValue }) => {
     try {
-      const response = await axios.delete(`/tasks/${taskId}`);
-      return response.data;
+      const { data } = await axios.delete(`/tasks/${taskId}`);
+      return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
 
 export const toggleCompleted = createAsyncThunk(
   "tasks/toggleCompleted",
-  async (task, thunkAPI) => {
+  async (task, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`/tasks/${task.id}`, {
+      const { data } = await axios.put(`/tasks/${task.id}`, {
         completed: !task.completed,
       });
-      return response.data;
+      return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
+      return rejectWithValue(error.message);
     }
   }
 );
