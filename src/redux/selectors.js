@@ -1,4 +1,33 @@
-export const getTasks = state => state.toDos.tasks.items;
-export const getIsLoading = state => state.toDos.tasks.isLoading;
-export const getError = state => state.toDos.tasks.error;
-export const getStatusFilter = state => state.toDos.filters.status;
+import { createSelector } from "@reduxjs/toolkit";
+import { statusFilters } from "./constants";
+
+export const selectTasks = state => state.toDos.tasks.items;
+export const selectIsLoading = state => state.toDos.tasks.isLoading;
+export const selectError = state => state.toDos.tasks.error;
+export const selectStatusFilter = state => state.toDos.filters.status;
+export const selectVisibleTasks = createSelector(
+  [selectTasks, selectStatusFilter],
+  (tasks, statusFilter) => {
+    switch (statusFilter) {
+      case statusFilters.active:
+        return tasks.filter(task => !task.completed);
+      case statusFilters.completed:
+        return tasks.filter(task => task.completed);
+      default:
+        return tasks;
+    }
+  }
+);
+export const selectTaskCount = createSelector([selectTasks], tasks => {
+  return tasks.reduce(
+    (count, task) => {
+      if (task.completed) {
+        count.completed += 1;
+      } else {
+        count.active += 1;
+      }
+      return count;
+    },
+    { active: 0, completed: 0 }
+  );
+});
